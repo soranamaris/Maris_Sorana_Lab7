@@ -10,7 +10,23 @@ public partial class ProductPage : ContentPage
 		InitializeComponent();
         sl = slist;
     }
-    async void OnSaveButtonClicked(object sender, EventArgs e)
+    async void OnAddButtonClicked(object sender, EventArgs e)
+    {
+        Product p;
+        if (listView.SelectedItem != null)
+        {
+            p = listView.SelectedItem as Product;
+            var lp = new ListProduct()
+            {
+                ShopListID = sl.ID,
+                ProductID = p.ID
+            };
+            await App.Database.SaveListProductAsync(lp);
+            p.ListProducts = new List<ListProduct> { lp };
+            await Navigation.PopAsync();
+        }
+    }
+        async void OnSaveButtonClicked(object sender, EventArgs e)
     {
         var product = (Product)BindingContext;
         await App.Database.SaveProductAsync(product);
